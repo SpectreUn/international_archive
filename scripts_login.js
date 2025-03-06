@@ -15,7 +15,7 @@ document.getElementById("loginButton").addEventListener("click", function() {
         
         // Redirect to new page after 2 seconds
         setTimeout(() => {
-            window.location.href = "welcome.html";
+            window.location.href = "home_page.html";
         }, 2000); // 2000 milliseconds = 2 seconds
     } else {
         messageElement.textContent = "Invalid username or password.";
