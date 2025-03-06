@@ -9,9 +9,14 @@ document.getElementById("loginButton").addEventListener("click", function() {
     const validPassword = "jackBox@1946";
 
     // Validate username and password
-    if (username === validUsername && password === validPassword) {
+   if (username === validUsername && password === validPassword) {
         messageElement.textContent = "Login successful!";
         messageElement.style.color = "green";
+        
+        // Redirect to new page after 2 seconds
+        setTimeout(() => {
+            window.location.href = "welcome.html";
+        }, 2000); // 2000 milliseconds = 2 seconds
     } else {
         messageElement.textContent = "Invalid username or password.";
         messageElement.style.color = "red";
