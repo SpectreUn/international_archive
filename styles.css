@@ -5,7 +5,8 @@ body {
 }
 
 .header {
-    background-color: #4CAF50;
+    background-image: url('header_background.jpg');
+    background-size: cover;
     padding: 20px;
     text-align: center;
     color: white;
@@ -18,7 +19,7 @@ body {
 .nav-bar {
     display: flex;
     justify-content: center;
-    background-color: #0000FF;
+    background-color: #333;
 }
 
 .nav-bar a {
@@ -32,3 +33,4 @@ body {
     background-color: #ddd;
     color: black;
 }
+
