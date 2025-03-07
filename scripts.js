@@ -1,2 +1,5 @@
+function navigateTo(page) {
+    window.location.href = page;
+}
 
-console.log("Welcome to My Website!");
+
