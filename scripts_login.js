@@ -15,7 +15,6 @@ document.addEventListener("DOMContentLoaded", function() {
     function handleLogin() {
         const username = usernameInput.value.trim();
         const password = passwordInput.value.trim();
-        const clearence = CLearenceut.velvalue.trim();
 
         // Validate inputs
         if (!username || !password) {
