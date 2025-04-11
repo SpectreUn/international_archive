@@ -3,19 +3,203 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>FAQs</title>
+    <title>FAQs - Spectre International Archive</title>
     <link rel="stylesheet" href="styles.css">
+    <style>
+        /* FAQ-specific styles */
+        .faq-container {
+            max-width: 800px;
+            margin: 2rem auto;
+            padding: 0 1rem;
+        }
+        
+        .faq-item {
+            margin-bottom: 1rem;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            overflow: hidden;
+            transition: all 0.3s ease;
+        }
+        
+        .faq-question {
+            padding: 1rem;
+            background-color: #f8f9fa;
+            cursor: pointer;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-weight: 600;
+        }
+        
+        .faq-question:hover {
+            background-color: #e9ecef;
+        }
+        
+        .faq-answer {
+            padding: 0 1rem;
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.3s ease;
+        }
+        
+        .faq-item.active .faq-answer {
+            padding: 1rem;
+            max-height: 500px;
+        }
+        
+        .faq-toggle {
+            font-size: 1.2rem;
+            transition: transform 0.3s ease;
+        }
+        
+        .faq-item.active .faq-toggle {
+            transform: rotate(45deg);
+        }
+        
+        .search-container {
+            margin: 1rem 0;
+            text-align: center;
+        }
+        
+        #faq-search {
+            padding: 0.5rem;
+            width: 100%;
+            max-width: 500px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+        }
+        
+        .no-results {
+            text-align: center;
+            padding: 2rem;
+            color: #666;
+            display: none;
+        }
+    </style>
 </head>
 <body>
     <div class="header">
-        <h1>Contact Us</h1>
+        <h1>Frequently Asked Questions</h1>
     </div>
     <div class="nav-bar">
-     <a href="#" onclick="navigateTo('home.html')">Home</a>
-     <a href="#" onclick="navigateTo('AboutUs.html')">About Us</a>
-     <a href="#" onclick="navigateTo('FAQs.html')">FAQs</a>
+        <a href="#" onclick="navigateTo('home.html')">Home</a>
+        <a href="#" onclick="navigateTo('AboutUs.html')">About Us</a>
+        <a href="#" onclick="navigateTo('FAQs.html')">FAQs</a>
     </div>
-    <script src="scripts.js"></script>
+    
+    <div class="faq-container">
+        <div class="search-container">
+            <input type="text" id="faq-search" placeholder="Search FAQs...">
+        </div>
+        
+        <div class="faq-list">
+            <div class="faq-item">
+                <div class="faq-question">
+                    <span>What is the Spectre Initative?</span>
+                    <span class="faq-toggle">+</span>
+                </div>
+                <div class="faq-answer">
+                    <p>The Spectre International Archive is a digital repository of declassified documents and historical records related to international relations and global diplomacy.</p>
+                </div>
+            </div>
+            
+            <div class="faq-item">
+                <div class="faq-question">
+                    <span>How can I access documents in the archive?</span>
+                    <span class="faq-toggle">+</span>
+                </div>
+                <div class="faq-answer">
+                    <p>Most documents in our archive are freely accessible to the public. Simply navigate to the archive section and browse or search for documents of interest.</p>
+                </div>
+            </div>
+            
+            <div class="faq-item">
+                <div class="faq-question">
+                    <span>Are the documents in the archive verified?</span>
+                    <span class="faq-toggle">+</span>
+                </div>
+                <div class="faq-answer">
+                    <p>Yes, all documents undergo a verification process before being added to the archive. We work with historians and experts to authenticate materials.</p>
+                </div>
+            </div>
+            
+            <div class="faq-item">
+                <div class="faq-question">
+                    <span>Can I contribute to the archive?</span>
+                    <span class="faq-toggle">+</span>
+                </div>
+                <div class="faq-answer">
+                    <p>We welcome contributions from researchers and the public. Please contact us through our submission form with details about the materials you'd like to contribute.</p>
+                </div>
+            </div>
+            
+            <div class="faq-item">
+                <div class="faq-question">
+                    <span>How often is the archive updated?</span>
+                    <span class="faq-toggle">+</span>
+                </div>
+                <div class="faq-answer">
+                    <p>We add new materials regularly as they become available and pass our verification process. Major updates are announced on our homepage.</p>
+                </div>
+            </div>
+            
+            <div class="faq-item">
+                <div class="faq-question">
+                    <span>Is there a way to request specific documents?</span>
+                    <span class="faq-toggle">+</span>
+                </div>
+                <div class="faq-answer">
+                    <p>Yes, you can submit document requests through our contact page. While we can't guarantee fulfillment, we'll do our best to locate relevant materials.</p>
+                </div>
+            </div>
+        </div>
+        
+        <div class="no-results">
+            <p>No FAQs matched your search. Try different keywords or <a href="contact.html">contact us</a> directly.</p>
+        </div>
+    </div>
+    
+    <script>
+        // FAQ functionality
+        document.addEventListener('DOMContentLoaded', function() {
+            const faqItems = document.querySelectorAll('.faq-item');
+            const searchInput = document.getElementById('faq-search');
+            const noResults = document.querySelector('.no-results');
+            
+            // Toggle FAQ answers
+            faqItems.forEach(item => {
+                const question = item.querySelector('.faq-question');
+                question.addEventListener('click', () => {
+                    item.classList.toggle('active');
+                });
+            });
+            
+            // Search functionality
+            searchInput.addEventListener('input', function() {
+                const searchTerm = this.value.toLowerCase();
+                let hasResults = false;
+                
+                faqItems.forEach(item => {
+                    const question = item.querySelector('.faq-question span:first-child').textContent.toLowerCase();
+                    const answer = item.querySelector('.faq-answer').textContent.toLowerCase();
+                    
+                    if (question.includes(searchTerm) || answer.includes(searchTerm)) {
+                        item.style.display = '';
+                        hasResults = true;
+                    } else {
+                        item.style.display = 'none';
+                    }
+                });
+                
+                noResults.style.display = hasResults ? 'none' : 'block';
+            });
+            
+            // Navigation function
+            window.navigateTo = function(page) {
+                window.location.href = page;
+            };
+        });
+    </script>
 </body>
 </html>
 
