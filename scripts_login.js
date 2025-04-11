@@ -2,7 +2,6 @@ document.addEventListener("DOMContentLoaded", function() {
     const loginButton = document.getElementById("loginButton");
     const usernameInput = document.getElementById("usernameInput");
     const passwordInput = document.getElementById("passwordInput");
-    const clearence_Input = document.getElementById("Clearence_levelInput");
     const loginMessage = document.getElementById("loginMessage");
     
 
@@ -10,7 +9,6 @@ document.addEventListener("DOMContentLoaded", function() {
     const validCredentials = {
         username: "DoctorPayne",
         password: "jackBox@1946",
-        clearence_level: "R_3"
     };
 
     // Login function
