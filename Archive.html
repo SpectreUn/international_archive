@@ -4,170 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Spectre Archive</title>
-    <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            font-family: Arial, sans-serif;
-        }
-        
-        body {
-            background-color: #f5f5f5;
-            color: #333;
-            line-height: 1.6;
-        }
-        
-        .header {
-            background-image: url('header_background.jpg');
-            background-size: cover;
-            padding: 20px;
-            text-align: center;
-            color: white;
-        }
-        
-        .header h1 {
-            margin: 0;
-            text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
-        }
-        
-        /* Navigation Bar */
-        .nav-bar {
-            display: flex;
-            justify-content: center;
-            background-color: #333;
-        }
-        
-        .nav-bar a {
-            color: white;
-            padding: 14px 20px;
-            text-decoration: none;
-            text-align: center;
-            transition: all 0.3s;
-        }
-        
-        .nav-bar a:hover {
-            background-color: #ddd;
-            color: black;
-        }
-        
-        .nav-bar a.active {
-            background-color: #555;
-        }
-
-        /* Main Content */
-        .container {
-            max-width: 900px;
-            margin: 20px auto;
-            padding: 0 20px;
-        }
-        
-        .search-box {
-            margin-bottom: 20px;
-        }
-        
-        #searchInput {
-            width: 100%;
-            padding: 12px;
-            border: 1px solid #ddd;
-            border-radius: 4px;
-            font-size: 1rem;
-        }
-        
-        /* Document Styles */
-        .document {
-            background: white;
-            margin-bottom: 15px;
-            border-radius: 4px;
-            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
-            overflow: hidden;
-        }
-        
-        .document-header {
-            padding: 15px;
-            cursor: pointer;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            background-color: #f8f8f8;
-            border-bottom: 1px solid #eee;
-        }
-        
-        .document-header:hover {
-            background-color: #eee;
-        }
-        
-        .document-title {
-            font-weight: bold;
-            color: #222;
-            margin-bottom: 5px;
-        }
-        
-        .document-meta {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 8px;
-            margin-bottom: 5px;
-        }
-        
-        .document-ref {
-            background-color: #e3f2fd;
-            color: #1565c0;
-            padding: 3px 8px;
-            border-radius: 3px;
-            font-size: 0.8rem;
-            font-family: monospace;
-        }
-        
-        .document-tag {
-            background-color: #e8f5e9;
-            color: #2e7d32;
-            padding: 3px 8px;
-            border-radius: 3px;
-            font-size: 0.8rem;
-        }
-        
-        .document-date {
-            color: #666;
-            font-size: 0.85rem;
-        }
-        
-        .document-summary {
-            color: #444;
-            font-size: 0.9rem;
-        }
-        
-        .document-content {
-            padding: 0 15px;
-            max-height: 0;
-            overflow: hidden;
-            transition: max-height 0.3s ease;
-        }
-        
-        .document.active .document-content {
-            padding: 15px;
-            max-height: 1000px;
-            background-color: #fafafa;
-        }
-        
-        .expand-icon {
-            transition: transform 0.3s;
-            color: #666;
-        }
-        
-        .document.active .expand-icon {
-            transform: rotate(180deg);
-        }
-        
-        .no-results {
-            text-align: center;
-            padding: 30px;
-            color: #666;
-            background-color: white;
-            border-radius: 4px;
-            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
-        }
-    </style>
+    <link rel="stylesheet" href="styles.css">
 </head>
 <body>
     <div class="header">
@@ -198,7 +35,8 @@
                 ref: "SPC-2023-001",
                 title: "Operation Midnight Sun",
                 date: "2023-11-15",
-                tags: ["Arctic", "Surveillance", "Top Secret"],
+                tags: ["Arctic", "Surveillance"],
+                confidential: true,
                 summary: "Final report on Arctic surveillance operations.",
                 content: "All assets were successfully extracted with minimal complications. Weather conditions proved more challenging than anticipated, requiring adjustment to extraction timelines. Recommend additional cold weather gear for future operations in this region."
             },
@@ -206,7 +44,8 @@
                 ref: "SPC-2023-002",
                 title: "Weekly Intelligence Briefing",
                 date: "2023-10-22",
-                tags: ["Weekly", "Sector 7", "Intercepts"],
+                tags: ["Weekly", "Sector 7"],
+                confidential: false,
                 summary: "Summary of field agent reports and signal intercepts.",
                 content: "Increased activity detected in Sector 7. All other sectors reporting normal status. Signal intercepts suggest possible communication between unknown parties using encrypted channels. Three new frequencies identified for monitoring."
             },
@@ -214,7 +53,8 @@
                 ref: "SPC-2023-003",
                 title: "Asset Extraction Protocol",
                 date: "2023-09-18",
-                tags: ["Protocol", "Emergency", "Safe Houses"],
+                tags: ["Protocol", "Emergency"],
+                confidential: true,
                 summary: "Standard operating procedures for emergency extraction.",
                 content: "Updated safe house locations and new verification codes for Q4 2023. All field agents must acknowledge receipt of this update. Changes include new extraction points in urban areas and revised authentication procedures."
             },
@@ -222,7 +62,8 @@
                 ref: "SPC-2023-004",
                 title: "Southeast Asia Threat Assessment",
                 date: "2023-08-05",
-                tags: ["Threat", "Southeast Asia", "Shipping"],
+                tags: ["Threat", "Southeast Asia"],
+                confidential: false,
                 summary: "Recent developments in Southeast Asian region.",
                 content: "Shifting alliances detected. Three new persons of interest identified. Recommended increased surveillance on shipping lanes near coordinates 12.3456, 98.7654. Particular attention should be paid to cargo manifests from identified vessels."
             },
@@ -230,7 +71,8 @@
                 ref: "SPC-2023-005",
                 title: "Quarterly Budget Allocation",
                 date: "2023-07-01",
-                tags: ["Budget", "Q3", "Funding"],
+                tags: ["Budget", "Q3"],
+                confidential: false,
                 summary: "Approved funding distribution for Q3 2023.",
                 content: "Field operations 45%, Research 25%, Equipment 20%, Contingency 10%. Special projects budget to be reviewed separately at next board meeting. Note: Additional funds allocated for drone upgrades in surveillance division."
             }
@@ -247,12 +89,29 @@
             const container = document.getElementById('documentsContainer');
             container.innerHTML = '';
             
+            const searchLower = searchTerm.toLowerCase();
+            const isRefSearch = searchLower.startsWith("spc-") || searchLower.startsWith("spc");
+            
             const filteredDocs = documents.filter(doc => {
-                const searchLower = searchTerm.toLowerCase();
-                return doc.ref.toLowerCase().includes(searchLower) || 
-                       doc.title.toLowerCase().includes(searchLower) ||
-                       doc.summary.toLowerCase().includes(searchLower) ||
-                       doc.tags.some(tag => tag.toLowerCase().includes(searchLower));
+                // Always show if not confidential
+                if (!doc.confidential) return true;
+                
+                // Show confidential docs only if searched by exact reference
+                if (doc.confidential) {
+                    return doc.ref.toLowerCase() === searchLower || 
+                           doc.ref.toLowerCase().includes(searchLower);
+                }
+                
+                return false;
+            }).filter(doc => {
+                // Additional filtering for non-confidential docs
+                if (!doc.confidential) {
+                    return doc.ref.toLowerCase().includes(searchLower) || 
+                           doc.title.toLowerCase().includes(searchLower) ||
+                           doc.summary.toLowerCase().includes(searchLower) ||
+                           doc.tags.some(tag => tag.toLowerCase().includes(searchLower));
+                }
+                return true;
             });
             
             if (filteredDocs.length === 0) {
@@ -262,7 +121,7 @@
             
             filteredDocs.forEach(doc => {
                 const docElement = document.createElement('div');
-                docElement.className = 'document';
+                docElement.className = `document ${doc.confidential && !isRefSearch ? 'hidden-doc' : ''}`;
                 docElement.innerHTML = `
                     <div class="document-header">
                         <div>
@@ -270,6 +129,7 @@
                             <div class="document-meta">
                                 <span class="document-ref">${doc.ref}</span>
                                 ${doc.tags.map(tag => `<span class="document-tag">${tag}</span>`).join('')}
+                                ${doc.confidential ? '<span class="confidential-tag">CONFIDENTIAL</span>' : ''}
                                 <span class="document-date">${formatDate(doc.date)}</span>
                             </div>
                             <div class="document-summary">${doc.summary}</div>
