@@ -58,15 +58,6 @@
                 summary: "[CLASSIFIED] Details regarding special initiative.",
                 content: "This document contains highly sensitive information regarding Project Phoenix. Access restricted to Level 5 personnel only. All operational details are to be handled through secure channels. Phase 1 testing completed with 92% success rate. Phase 2 deployment scheduled for Q1 2024. Extraction team Alpha-9 assigned to oversight."
             },
-            {
-                ref: "SPC-2023-004",
-                title: "Southeast Asia Threat Assessment",
-                date: "2023-08-05",
-                tags: ["Threat", "Southeast Asia"],
-                confidential: false,
-                summary: "Recent developments in Southeast Asian region.",
-                content: "Shifting alliances detected. Three new persons of interest identified. Recommended increased surveillance on shipping lanes."
-            }
         ];
 
         function formatDate(dateString) {
@@ -146,5 +137,31 @@
             });
         });
     </script>
+<script>
+  // Fetch documents from GitHub
+  async function loadDocuments() {
+    const response = await fetch('https://github.com/SpectreUn/Spectre-documents/main/metadata.json');
+    const docs = await response.json();
+    
+    // Render documents
+    const container = document.getElementById('documentsContainer');
+    docs.forEach(doc => {
+      const docElement = document.createElement('div');
+      docElement.className = 'document';
+      docElement.innerHTML = `
+        <h3>${doc.title} <small>${doc.ref}</small></h3>
+        <p>${doc.summary}</p>
+        <a href="${doc.file}" class="download-btn" 
+           download="${doc.ref}-${doc.title.replace(/ /g, '_')}.${doc.file.split('.').pop()}">
+          Download
+        </a>
+      `;
+      container.appendChild(docElement);
+    });
+  }
+
+  // Initialize
+  document.addEventListener('DOMContentLoaded', loadDocuments);
+</script>
 </body>
 </html>
