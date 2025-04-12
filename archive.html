@@ -4,14 +4,13 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Spectre Archive</title>
-    <link rel="stylesheet" href="styles_archive.css">
+    <link rel="stylesheet" href="styles.css">
 </head>
 <body>
     <div class="header">
-        <h1>Spectre Initative International Archive</h1>
+        <h1>Spectre Archive</h1>
     </div>
 
-    <!-- Navigation Bar -->
     <nav class="nav-bar">
         <a href="home.html">Home</a>
         <a href="archive.html" class="active">Archive</a>
@@ -20,7 +19,7 @@
 
     <div class="container">
         <div class="search-box">
-            <input type="text" id="searchInput" placeholder="Search by reference number or keywords...">
+            <input type="text" id="searchInput" placeholder="Search by reference number (e.g., SPC-2023-999) or keywords...">
         </div>
         
         <div id="documentsContainer">
@@ -36,9 +35,9 @@
                 title: "Operation Midnight Sun",
                 date: "2023-11-15",
                 tags: ["Arctic", "Surveillance"],
-                confidential: true,
+                confidential: false,
                 summary: "Final report on Arctic surveillance operations.",
-                content: "All assets were successfully extracted with minimal complications. Weather conditions proved more challenging than anticipated, requiring adjustment to extraction timelines. Recommend additional cold weather gear for future operations in this region."
+                content: "All assets were successfully extracted with minimal complications. Weather conditions proved more challenging than anticipated, requiring adjustment to extraction timelines."
             },
             {
                 ref: "SPC-2023-002",
@@ -47,16 +46,16 @@
                 tags: ["Weekly", "Sector 7"],
                 confidential: false,
                 summary: "Summary of field agent reports and signal intercepts.",
-                content: "Increased activity detected in Sector 7. All other sectors reporting normal status. Signal intercepts suggest possible communication between unknown parties using encrypted channels. Three new frequencies identified for monitoring."
+                content: "Increased activity detected in Sector 7. All other sectors reporting normal status. Signal intercepts suggest possible communication between unknown parties."
             },
             {
-                ref: "SPC-2023-003",
-                title: "Asset Extraction Protocol",
-                date: "2023-09-18",
-                tags: ["Protocol", "Emergency"],
+                ref: "SPC-2023-006",
+                title: "Project Phoenix - Eyes Only",
+                date: "2023-09-30",
+                tags: ["Top Secret", "Project"],
                 confidential: true,
-                summary: "Standard operating procedures for emergency extraction.",
-                content: "Updated safe house locations and new verification codes for Q4 2023. All field agents must acknowledge receipt of this update. Changes include new extraction points in urban areas and revised authentication procedures."
+                summary: "[CLASSIFIED] Details regarding special initiative.",
+                content: "This document contains highly sensitive information regarding Project Phoenix. Access restricted to Level 5 personnel only. All operational details are to be handled through secure channels. Phase 1 testing completed with 92% success rate. Phase 2 deployment scheduled for Q1 2024. Extraction team Alpha-9 assigned to oversight."
             },
             {
                 ref: "SPC-2023-004",
@@ -65,53 +64,52 @@
                 tags: ["Threat", "Southeast Asia"],
                 confidential: false,
                 summary: "Recent developments in Southeast Asian region.",
-                content: "Shifting alliances detected. Three new persons of interest identified. Recommended increased surveillance on shipping lanes near coordinates 12.3456, 98.7654. Particular attention should be paid to cargo manifests from identified vessels."
-            };
+                content: "Shifting alliances detected. Three new persons of interest identified. Recommended increased surveillance on shipping lanes."
+            }
+        ];
 
-        // Format date
         function formatDate(dateString) {
             const options = { year: 'numeric', month: 'short', day: 'numeric' };
             return new Date(dateString).toLocaleDateString('en-US', options);
         }
 
-        // Render documents
         function renderDocuments(searchTerm = '') {
             const container = document.getElementById('documentsContainer');
             container.innerHTML = '';
             
-            const searchLower = searchTerm.toLowerCase();
-            const isRefSearch = searchLower.startsWith("spc-") || searchLower.startsWith("spc");
+            const searchLower = searchTerm.toLowerCase().trim();
+            const isExactRefSearch = documents.some(doc => 
+                doc.ref.toLowerCase() === searchLower
+            );
             
             const filteredDocs = documents.filter(doc => {
-                // Always show if not confidential
-                if (!doc.confidential) return true;
-                
-                // Show confidential docs only if searched by exact reference
-                if (doc.confidential) {
-                    return doc.ref.toLowerCase() === searchLower || 
-                           doc.ref.toLowerCase().includes(searchLower);
-                }
-                
-                return false;
-            }).filter(doc => {
-                // Additional filtering for non-confidential docs
+                // Always show non-confidential docs that match search
                 if (!doc.confidential) {
                     return doc.ref.toLowerCase().includes(searchLower) || 
                            doc.title.toLowerCase().includes(searchLower) ||
                            doc.summary.toLowerCase().includes(searchLower) ||
                            doc.tags.some(tag => tag.toLowerCase().includes(searchLower));
                 }
-                return true;
+                // Only show confidential docs if exact reference is searched
+                return doc.confidential && (
+                    doc.ref.toLowerCase() === searchLower || isExactRefSearch
+                );
             });
             
             if (filteredDocs.length === 0) {
-                container.innerHTML = '<div class="no-results">No documents found matching your search criteria.</div>';
+                container.innerHTML = `
+                    <div class="no-results">
+                        ${searchLower ? 
+                            'No documents found matching your search criteria.' : 
+                            'No documents to display. Try searching by reference number.'}
+                        ${searchLower.startsWith('spc') ? '' : '<br>For confidential documents, search by exact reference number.'}
+                    </div>`;
                 return;
             }
             
             filteredDocs.forEach(doc => {
                 const docElement = document.createElement('div');
-                docElement.className = `document ${doc.confidential && !isRefSearch ? 'hidden-doc' : ''}`;
+                docElement.className = 'document';
                 docElement.innerHTML = `
                     <div class="document-header">
                         <div>
@@ -128,22 +126,20 @@
                     </div>
                     <div class="document-content">
                         <p>${doc.content}</p>
+                        ${doc.confidential ? '<p class="confidential-notice"><em>This document is classified. Unauthorized access prohibited.</em></p>' : ''}
                     </div>
                 `;
                 container.appendChild(docElement);
                 
-                // Add click handler
                 docElement.querySelector('.document-header').addEventListener('click', () => {
                     docElement.classList.toggle('active');
                 });
             });
         }
 
-        // Initialize
         document.addEventListener('DOMContentLoaded', () => {
             renderDocuments();
             
-            // Search functionality
             document.getElementById('searchInput').addEventListener('input', (e) => {
                 renderDocuments(e.target.value);
             });
