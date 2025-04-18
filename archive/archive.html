@@ -30,80 +30,137 @@
 
     <script>
         // ===== DOCUMENT DATA =====
-        // In a real implementation, this would fetch from metadata.json
-        async function loadDocuments() {
-  const response = await fetch('https://raw.githubusercontent.com/SpectreUn/Spectre-documents/main/metadata.json');
-  return await response.json();
-        };
+      // js/app.js
+document.addEventListener('DOMContentLoaded', async () => {
+    try {
+        // Load document metadata
+        const response = await fetch('../data/metadata.json');
+        if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
+        const documents = await response.json();
 
-        // ===== HELPER FUNCTIONS =====
-        function formatDate(dateString) {
-            const options = { year: 'numeric', month: 'short', day: 'numeric' };
-            return new Date(dateString).toLocaleDateString('en-US', options);
-        }
-
-        function renderDocuments(searchTerm = '') {
-            const container = document.getElementById('documentsContainer');
-            container.innerHTML = '';
-            
-            const searchLower = searchTerm.toLowerCase().trim();
-            const isExactRefSearch = documents.some(doc => 
-                doc.ref.toLowerCase() === searchLower
-            );
-            
-            const filteredDocs = documents.filter(doc => {
-                // Always show non-confidential docs that match search
-                if (!doc.confidential) {
-                    return doc.ref.toLowerCase().includes(searchLower) || 
-                           doc.title.toLowerCase().includes(searchLower) ||
-                           doc.summary.toLowerCase().includes(searchLower) ||
-                           doc.tags.some(tag => tag.toLowerCase().includes(searchLower));
-                }
-                // Only show confidential docs if exact reference is searched
-                return doc.confidential && (
-                    doc.ref.toLowerCase() === searchLower || isExactRefSearch
-                );
-            });
-            
-            if (filteredDocs.length === 0) {
-                container.innerHTML = `
-                    <div class="no-results">
-                        ${searchLower ? 
-                            'No documents found matching your search criteria.' : 
-                            'No documents to display.'}
-                        ${searchLower.startsWith('spc') ? '' : '<br>For confidential documents, search by exact reference number.'}
-                    </div>`;
-                return;
-            }
-            
-            filteredDocs.forEach(doc => {
-                const docElement = document.createElement('div');
-                docElement.className = 'document';
-                docElement.innerHTML = `
-                    <div class="document-title">${doc.title}</div>
-                    <div class="document-meta">
-                        <span class="document-ref">${doc.ref}</span>
-                        ${doc.tags.map(tag => `<span class="document-tag">${tag}</span>`).join('')}
-                        ${doc.confidential ? '<span class="confidential-tag">CONFIDENTIAL</span>' : ''}
-                        <span class="document-date">${formatDate(doc.date)}</span>
-                    </div>
-                    <div class="document-summary">${doc.summary}</div>
-                    <a href="${doc.file}" class="download-btn" download="${doc.ref}-${doc.title.replace(/ /g, '_')}">
-                        Download Document
-                    </a>
-                `;
-                container.appendChild(docElement);
-            });
-        }
-
-        // ===== INITIALIZATION =====
-        document.addEventListener('DOMContentLoaded', () => {
-            renderDocuments();
-            
-            document.getElementById('searchInput').addEventListener('input', (e) => {
-                renderDocuments(e.target.value);
-            });
+        // Initialize search functionality
+        const searchInput = document.getElementById('searchInput');
+        searchInput.addEventListener('input', (e) => {
+            renderDocuments(documents, e.target.value.trim());
         });
+
+        // Initial render
+        renderDocuments(documents);
+        
+        // Show document count
+        updateDocumentCount(documents.length);
+
+    } catch (error) {
+        console.error('Failed to initialize archive:', error);
+        showErrorMessage();
+    }
+});
+
+function renderDocuments(documents, searchTerm = '') {
+    const container = document.getElementById('documentsContainer');
+    container.innerHTML = '';
+
+    const term = searchTerm.toLowerCase();
+    const filteredDocs = filterDocuments(documents, term);
+
+    if (filteredDocs.length === 0) {
+        showNoResults(searchTerm);
+        return;
+    }
+
+    filteredDocs.forEach(doc => {
+        container.appendChild(createDocumentCard(doc));
+    });
+
+    updateDocumentCount(filteredDocs.length, documents.length);
+}
+
+function filterDocuments(documents, searchTerm) {
+    return documents.filter(doc => {
+        // Always show non-confidential docs that match search
+        if (!doc.confidential) {
+            return (
+                doc.id.toLowerCase().includes(searchTerm) ||
+                doc.title.toLowerCase().includes(searchTerm) ||
+                doc.description.toLowerCase().includes(searchTerm) ||
+                doc.tags.some(tag => tag.toLowerCase().includes(searchTerm))
+            );
+        }
+        // Only show confidential docs if exact reference is searched
+        return doc.confidential && doc.id.toLowerCase() === searchTerm;
+    });
+}
+
+function createDocumentCard(doc) {
+    const docEl = document.createElement('div');
+    docEl.className = 'document';
+    docEl.innerHTML = `
+        <div class="document-header">
+            <div class="document-info">
+                <h3 class="document-title">
+                    <span class="document-id">${doc.id}</span>
+                    <span class="document-name">${doc.title}</span>
+                </h3>
+                <div class="document-class ${doc.class.toLowerCase()}">${doc.class}</div>
+                <p class="document-description">${doc.description}</p>
+            </div>
+            <div class="document-actions">
+                <a href="${doc.file}" 
+                   download="${generateDownloadFilename(doc)}" 
+                   class="download-btn"
+                   aria-label="Download ${doc.id} document">
+                    <svg viewBox="0 0 24 24">
+                        <path d="M5 20h14v-2H5v2zm7-18L5.33 8.67l1.42 1.42L11 5.83v11.34l4.25-4.24 1.42 1.42L12 22z"/>
+                    </svg>
+                </a>
+            </div>
+        </div>
+        <div class="document-footer">
+            ${doc.tags.map(tag => `<span class="tag">${tag}</span>`).join('')}
+        </div>
+    `;
+    return docEl;
+}
+
+function generateDownloadFilename(doc) {
+    const extension = doc.file.split('.').pop();
+    return `${doc.id}_${doc.title.replace(/[^a-z0-9]/gi, '_')}.${extension}`;
+}
+
+function updateDocumentCount(visible, total) {
+    const counter = document.getElementById('documentCounter') || createCounterElement();
+    counter.textContent = `Showing ${visible} of ${total} documents`;
+}
+
+function createCounterElement() {
+    const counter = document.createElement('div');
+    counter.id = 'documentCounter';
+    counter.className = 'document-counter';
+    document.querySelector('.container').prepend(counter);
+    return counter;
+}
+
+function showNoResults(searchTerm) {
+    const container = document.getElementById('documentsContainer');
+    container.innerHTML = `
+        <div class="no-results">
+            <p>No documents found matching "${searchTerm}"</p>
+            ${searchTerm.startsWith('spc') ? '' : 
+              '<p class="hint">Try searching by exact SPC ID (e.g. SPC-001)</p>'}
+        </div>
+    `;
+}
+
+function showErrorMessage() {
+    document.getElementById('documentsContainer').innerHTML = `
+        <div class="error">
+            <p>⚠️ Failed to load documents</p>
+            <p>Please refresh the page or try again later</p>
+        </div>
+    `;
+}
+        // In a real implementation, this would fetch from metadata.json
+      
     </script>
 </body>
 </html>
